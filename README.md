@@ -1,6 +1,9 @@
 #For Jack
 
 Hey Jack, the latest paramters are saved in the file Cv1.
+Corpus has the benchmark data split into 3 files, test/valid/train.
+The path.package file has been hardwired at the top of VLSTM-Autoencoder.lua
+I can not use the option to load a saved file. Maybe you can check the code to see why (it never seems to use opt.checkpoints).
 
 Akbir
 
