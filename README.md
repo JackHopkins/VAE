@@ -1,3 +1,12 @@
+#For Jack
+
+Hey Jack, the latest paramters are saved in the file Cv1.
+
+Akbir
+
+
+
+
 # Variational LSTM-Autoencoder
 
 This project implements the Variational LSTM sequence to sequence architecture for a sentence auto-encoding task.
