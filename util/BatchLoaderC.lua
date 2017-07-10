@@ -98,9 +98,21 @@ function BatchLoaderC.text_to_tensor(input_files, out_vocabfile, out_tensorfile,
        local scounts = 0
        for line in f:lines() do
           scounts = scounts + 1
-          local wcounts = 0
+          local wcounts = 20 --Must include numbers
           for word in line:gmatch'([^%s]+)' do
-	     wcounts = wcounts + 1
+            for pword in word:gmatch'([^?]+)' do
+                for qword in pword:gmatch'([^&]+)'do
+                  for rword in qword:gmatch'([^=]+)'do
+                    for sword in rword:gmatch'([^?/]+)'do
+                      for tword in sword:gmatch'([^+]+)'do
+                        if tonumber(tword) ~= nil then for digit in tword:gmatch'.'do
+                          wcounts = wcounts + 1 end
+                          else wcounts = wcounts +1 end
+                      end
+                    end
+                  end
+                end
+              end
           end
           max_sentence_l_tmp = math.max(max_sentence_l_tmp, wcounts)
        end
@@ -130,19 +142,40 @@ function BatchLoaderC.text_to_tensor(input_files, out_vocabfile, out_tensorfile,
           mask_tensors[split][sentence_num][1] = 1
           -- append tokens in the sentence
           local word_num = 1
-          for rword in line:gmatch'([^%s]+)' do
-             word_num = word_num + 1
-             if word2idx[rword]==nil then
-                idx2word[#idx2word + 1] = rword 
-                word2idx[rword] = #idx2word
-             end
-             output_tensors[split][sentence_num][word_num] = word2idx[rword]
-             mask_tensors[split][sentence_num][word_num] = 1
-             if word_num == max_sentence_l + 1 then break end -- leave the last token to EOS
-          end
-          -- append the end token
-          --output_tensors[split][sentence_num][word_num+1] = word2idx[tokens_END]
-          --mask_tensors[split][sentence_num][word_num+1] = 1
+            for rword in line:gmatch'([^%s]+)' do
+              for pword in rword:gmatch'([^?]+)' do
+                for qword in pword:gmatch'([^&]+)'do
+                  for rword in qword:gmatch'([^=]+)'do
+                    for sword in rword:gmatch'([^?/]+)'do
+                      for tword in sword:gmatch'([^+]+)'do
+                        --Check if Number, if so split further
+                        if tonumber(tword) ~= nil then
+                          for digit in tword:gmatch'.'do
+                            word_num = word_num + 1
+                            if word2idx[digit]==nil then
+                              idx2word[#idx2word + 1] = digit
+                              word2idx[digit] = #idx2word
+                            end
+                            output_tensors[split][sentence_num][word_num] = word2idx[tostring(digit)]
+                            mask_tensors[split][sentence_num][word_num] = 1
+                            if word_num == max_sentence_l + 1 then break end
+                          end
+                        else  --If not number then split
+                          word_num = word_num + 1
+                          if word2idx[tword]==nil then
+                            idx2word[#idx2word + 1] = tword 
+                            word2idx[tword] = #idx2word
+                          end
+                          output_tensors[split][sentence_num][word_num] = word2idx[tword]
+                          mask_tensors[split][sentence_num][word_num] = 1
+                          if word_num == max_sentence_l + 1 then break end 
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+            end
        end
     end
     print "done"
