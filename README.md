@@ -30,6 +30,20 @@ Following the above two papers, the variational layer is only added in between t
 ## Dependencies
 This code requires [Torch7](http://torch.ch/) and [nngraph](http://github.com/torch/nngraph)
 
+## Installation
+~~~
+git clone --recursive https://github.com/hughperkins/distro -b distro-cl ~/torch-cl
+cd ~/torch-cl; bash install-deps
+./install.sh
+
+source ~/.bashrc
+
+luarocks install torch
+luarocks install nn
+luarocks install nngraph
+
+~~~
+
 ## Usage
 - training on GPU: th VLSTM-Autoencoder.lua -gpuid 0
 - sampling on GPU: th sample.lua -gpuid 0 -cv cv/checkpoint -data dataset/test
