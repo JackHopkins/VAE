@@ -1,5 +1,6 @@
 package.path = package.path .. ';/Users/akbirkhan/desktop/Variational-LSTM-Autoencoder-master/?.lua;'
 package.path = package.path .. ';'
+package.path = package.path .. ';/home/ubuntu/torch/install/'
 require 'torch'
 require 'nn'
 require 'nngraph'
