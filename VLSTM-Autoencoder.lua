@@ -267,7 +267,9 @@ for i = 1, iterations do
   local epoch = i / loader.split_sizes[1]
   local timer = torch.Timer()
   local time = timer:time().real
-  local _, loss = optim.adam(feval, params, optim_state:cuda())
+  print(params)
+  print(optim_state)
+  local _, loss = optim.adam(feval, params, optim_state)
   train_losses[i] = loss[1] --loss is a table, we need to flatten it
   
   -- ###The first index of LookupTable is always 0.###
